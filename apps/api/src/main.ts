@@ -1,3 +1,4 @@
+import "dotenv/config"; // load apps/api/.env before anything imports Prisma
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import helmet from "helmet";
