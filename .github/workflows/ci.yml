@@ -13,8 +13,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -43,18 +41,35 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     env:
-      DATABASE_URL: postgresql://vast:vast@localhost:5432/vast?schema=public
+      # Admin role (superuser) — used ONLY for migrations + RLS setup.
+      ADMIN_URL: postgresql://vast:vast@localhost:5432/vast?schema=public
+      # Restricted app role — RLS is enforced on it, like production.
+      APP_URL: postgresql://vast_app:vast_app@localhost:5432/vast?schema=public
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          version: 10
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @vast/db generate
-      - run: pnpm --filter @vast/db deploy
-      - run: pnpm --filter @vast/db apply-rls
-      - run: pnpm --filter @vast/db test:isolation
+      - name: Migrate and apply RLS (admin role)
+        env:
+          DATABASE_URL: ${{ env.ADMIN_URL }}
+          DIRECT_URL: ${{ env.ADMIN_URL }}
+        run: |
+          pnpm --filter @vast/db deploy
+          pnpm --filter @vast/db apply-rls
+      - name: Create restricted app role
+        run: |
+          PGPASSWORD=vast psql -h localhost -U vast -d vast -v ON_ERROR_STOP=1 <<'SQL'
+          CREATE ROLE vast_app LOGIN PASSWORD 'vast_app';
+          GRANT USAGE ON SCHEMA public TO vast_app;
+          GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO vast_app;
+          GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO vast_app;
+          SQL
+      - name: Tenant isolation test (restricted role — RLS enforced)
+        env:
+          DATABASE_URL: ${{ env.APP_URL }}
+        run: pnpm --filter @vast/db test:isolation
