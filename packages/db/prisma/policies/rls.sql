@@ -2,11 +2,18 @@
 -- Run AFTER `prisma migrate` has created the tables:
 --   pnpm --filter @vast/db apply-rls
 --
--- How it works:
+-- Scope: tenant RLS applies to BUSINESS DATA tables (companies, contacts, deals,
+-- audit_logs). The identity / control-plane tables (tenants, users, memberships)
+-- are intentionally NOT under tenant RLS: resolving "which tenant does this user
+-- belong to" at login is a cross-tenant lookup that fail-closed RLS would block.
+-- Those tables are only ever read by trusted server code with an explicit userId
+-- filter (see TenantResolver), never exposed to client-controlled queries.
+--
+-- How it works for business data:
 --   * Every request runs inside a transaction that sets `app.tenant_id` to the
 --     tenant from the VERIFIED session (see packages/db/src/tenant.ts).
 --   * Each policy restricts rows to that tenant.
---   * FORCE ROW LEVEL SECURITY makes the policies apply even to the table owner
+--   * FORCE ROW LEVEL SECURITY makes policies apply even to the table owner
 --     (Prisma connects as the owner), so there is no bypass.
 --   * current_setting(..., true) returns NULL when unset, so a query with no
 --     tenant context sees ZERO rows — fail closed, never fail open.
@@ -17,19 +24,11 @@ CREATE OR REPLACE FUNCTION app_current_tenant() RETURNS uuid
   SELECT NULLIF(current_setting('app.tenant_id', true), '')::uuid
 $$;
 
--- tenants: a row is visible only to its own tenant context.
-ALTER TABLE "tenants" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "tenants" FORCE ROW LEVEL SECURITY;
-DROP POLICY IF EXISTS tenant_isolation ON "tenants";
-CREATE POLICY tenant_isolation ON "tenants"
-  USING ("id" = app_current_tenant())
-  WITH CHECK ("id" = app_current_tenant());
-
--- Generic tenant-scoped tables (all keyed on "tenantId").
+-- Tenant-scoped business tables (all keyed on "tenantId").
 DO $$
 DECLARE t text;
 BEGIN
-  FOREACH t IN ARRAY ARRAY['memberships','companies','contacts','deals','audit_logs']
+  FOREACH t IN ARRAY ARRAY['companies','contacts','deals','audit_logs']
   LOOP
     EXECUTE format('ALTER TABLE %I ENABLE ROW LEVEL SECURITY;', t);
     EXECUTE format('ALTER TABLE %I FORCE ROW LEVEL SECURITY;', t);

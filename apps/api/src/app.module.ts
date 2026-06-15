@@ -4,6 +4,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { HealthModule } from "./health/health.module";
 import { CrmModule } from "./crm/crm.module";
+import { AuthModule } from "./auth/auth.module";
 import { AuthGuard } from "./auth/auth.guard";
 import { RolesGuard } from "./auth/roles.guard";
 
@@ -13,6 +14,7 @@ import { RolesGuard } from "./auth/roles.guard";
     // Global rate limit: 100 requests / minute / IP by default.
     // Auth routes will tighten this further with a stricter per-route limit.
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
+    AuthModule,
     HealthModule,
     CrmModule,
   ],

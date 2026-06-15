@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -8,18 +9,24 @@ import { Reflector } from "@nestjs/core";
 import type { Request } from "express";
 import { IS_PUBLIC_KEY } from "./public.decorator";
 import type { CurrentUser } from "./current-user";
+import { SupabaseTokenVerifier } from "./supabase-token.verifier";
+import { TenantResolver } from "./tenant-resolver.service";
 
 /**
- * Deny-by-default authentication guard. Every route requires a verified session
- * unless explicitly marked @Public(). Registered globally in AppModule.
+ * Deny-by-default authentication guard. Every route requires a verified Supabase
+ * session unless explicitly marked @Public(). Registered globally in AppModule.
  *
- * NOTE: token verification is stubbed until the auth provider (Supabase Auth) is
- * wired. It currently rejects all non-public requests so nothing is accidentally
- * left open. Replace `verifyToken` with real JWT/JWKS verification then.
+ * Flow: verify JWT signature/issuer/audience -> resolve tenant membership + role
+ * from the DB -> attach the principal. Tenant comes from the verified identity
+ * (+ verified X-Tenant-Id membership), never from unverified client input.
  */
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly verifier: SupabaseTokenVerifier,
+    private readonly tenantResolver: TenantResolver,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
@@ -34,12 +41,17 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException("Missing bearer token");
     }
 
-    const user = await this.verifyToken(token);
-    if (!user) {
+    const claims = await this.verifier.verify(token);
+    if (!claims) {
       throw new UnauthorizedException("Invalid or expired token");
     }
 
-    // Attach the verified principal; controllers read it via @CurrentUser().
+    const requestedTenant = this.readTenantHeader(request);
+    const user = await this.tenantResolver.resolve(claims, requestedTenant);
+    if (!user) {
+      throw new ForbiddenException("No access to the requested tenant");
+    }
+
     (request as Request & { user?: CurrentUser }).user = user;
     return true;
   }
@@ -50,9 +62,9 @@ export class AuthGuard implements CanActivate {
     return header.slice("Bearer ".length).trim() || null;
   }
 
-  // TODO(auth): verify the JWT against the provider's JWKS, then map claims to
-  // a CurrentUser (resolve tenant membership + role). Until then, deny.
-  private async verifyToken(_token: string): Promise<CurrentUser | null> {
-    return null;
+  private readTenantHeader(request: Request): string | undefined {
+    const value = request.headers["x-tenant-id"];
+    if (typeof value === "string" && value.trim()) return value.trim();
+    return undefined;
   }
 }
