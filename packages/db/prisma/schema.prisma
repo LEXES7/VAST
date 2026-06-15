@@ -127,3 +127,21 @@ model Deal {
   @@index([tenantId, stage])
   @@map("deals")
 }
+
+// Immutable record of sensitive actions (logins, role changes, deletes, exports).
+// Append-only: never updated or deleted by application code.
+model AuditLog {
+  id         String   @id @default(uuid())
+  tenantId   String
+  actorId    String?
+  action     String
+  targetType String?
+  targetId   String?
+  metadata   Json?
+  ip         String?
+  createdAt  DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([tenantId, createdAt])
+  @@map("audit_logs")
+}

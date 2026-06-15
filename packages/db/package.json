@@ -7,8 +7,11 @@
   "scripts": {
     "generate": "prisma generate",
     "migrate": "prisma migrate dev",
+    "deploy": "prisma migrate deploy",
+    "apply-rls": "prisma db execute --file ./prisma/policies/rls.sql --schema ./prisma/schema.prisma",
     "studio": "prisma studio",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:isolation": "node --import tsx --test test/isolation.test.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.2.1"
@@ -16,6 +19,7 @@
   "devDependencies": {
     "@types/node": "^22.10.5",
     "prisma": "^6.2.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }
