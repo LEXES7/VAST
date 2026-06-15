@@ -10,6 +10,11 @@ jobs:
   build:
     name: lint · typecheck · build
     runs-on: ubuntu-latest
+    env:
+      # Build-time placeholders so `next build` can evaluate the Supabase client.
+      # Real values come from .env.local at runtime; these are never used at runtime.
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: placeholder-anon-key
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -59,8 +64,8 @@ jobs:
           DATABASE_URL: ${{ env.ADMIN_URL }}
           DIRECT_URL: ${{ env.ADMIN_URL }}
         run: |
-          pnpm --filter @vast/db deploy
-          pnpm --filter @vast/db apply-rls
+          pnpm --filter @vast/db run migrate:deploy
+          pnpm --filter @vast/db run apply-rls
       - name: Create restricted app role
         run: |
           PGPASSWORD=vast psql -h localhost -U vast -d vast -v ON_ERROR_STOP=1 <<'SQL'
