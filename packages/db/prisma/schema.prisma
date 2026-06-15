@@ -1,0 +1,129 @@
+// Vast database schema.
+// Multi-tenant: every tenant-scoped row carries `tenantId`.
+// Hard isolation is enforced in Postgres via Row-Level Security (see migrations);
+// the application also always scopes queries by tenantId as defense in depth.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  owner
+  admin
+  member
+  viewer
+}
+
+enum DealStage {
+  lead
+  qualified
+  proposal
+  negotiation
+  won
+  lost
+}
+
+// A tenant = one customer organization. Root of all data isolation.
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships Membership[]
+  contacts    Contact[]
+  companies   Company[]
+  deals       Deal[]
+
+  @@map("tenants")
+}
+
+// A user can belong to multiple tenants (one Membership per tenant).
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships Membership[]
+
+  @@map("users")
+}
+
+model Membership {
+  id       String @id @default(uuid())
+  tenantId String
+  userId   String
+  role     Role   @default(member)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([tenantId, userId])
+  @@index([tenantId])
+  @@map("memberships")
+}
+
+// --- CRM module ---
+
+model Company {
+  id        String   @id @default(uuid())
+  tenantId  String
+  name      String
+  domain    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  contacts Contact[]
+
+  @@index([tenantId])
+  @@map("companies")
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  tenantId  String
+  firstName String
+  lastName  String?
+  email     String?
+  phone     String?
+  companyId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  deals   Deal[]
+
+  @@index([tenantId])
+  @@index([tenantId, email])
+  @@map("contacts")
+}
+
+model Deal {
+  id        String    @id @default(uuid())
+  tenantId  String
+  title     String
+  amount    Decimal   @default(0) @db.Decimal(14, 2)
+  stage     DealStage @default(lead)
+  contactId String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  tenant  Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  contact Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([tenantId, stage])
+  @@map("deals")
+}
