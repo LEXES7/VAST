@@ -3,6 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD } from "@nestjs/core";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { HealthModule } from "./health/health.module";
+import { CrmModule } from "./crm/crm.module";
 import { AuthGuard } from "./auth/auth.guard";
 import { RolesGuard } from "./auth/roles.guard";
 
@@ -13,6 +14,7 @@ import { RolesGuard } from "./auth/roles.guard";
     // Auth routes will tighten this further with a stricter per-route limit.
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
     HealthModule,
+    CrmModule,
   ],
   providers: [
     // Order matters: throttle first, then authenticate, then authorize.
