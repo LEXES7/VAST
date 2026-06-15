@@ -17,7 +17,7 @@
   <img src="https://img.shields.io/badge/Supabase-Auth-3FCF8E?logo=supabase&logoColor=white" />
 </p>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&duration=3500&pause=800&color=8B5CF6&center=true&vCenter=true&width=620&lines=A+modern%2C+unified+business+suite.;A+Zoho+alternative%2C+done+right.;Clean+UX.+One+data+model.+Secure+by+design." alt="Typing tagline" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=20&duration=3500&pause=800&color=8B5CF6&center=true&vCenter=true&width=620&lines=A+modern%2C+unified+business+suite.;Clean+UX.+One+data+model.;Secure+by+design." alt="Typing tagline" />
 
 </div>
 
@@ -25,7 +25,7 @@
 
 ## 👋 What is Vast?
 
-**Vast** is a modern, unified business suite — think of it as a Zoho alternative, but built to fix the things people actually complain about: clunky interfaces, data that feels siloed between apps, sluggish performance, and pricing you need a spreadsheet to understand.
+**Vast** is a modern, unified business suite — built to fix the things people actually complain about in business software: clunky interfaces, data that feels siloed between apps, sluggish performance, and pricing you need a spreadsheet to understand.
 
 We're starting where it matters most — a **CRM / Sales** app as the flagship — and growing the suite from there, all on top of one clean, shared foundation so everything feels like *one product*, not a bundle of bolted-together tools.
 
