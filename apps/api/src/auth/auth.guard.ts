@@ -8,8 +8,12 @@ import {
 import { Reflector } from "@nestjs/core";
 import type { Request } from "express";
 import { IS_PUBLIC_KEY } from "./public.decorator";
+import { IS_AUTH_ONLY_KEY } from "./auth-only.decorator";
 import type { CurrentUser } from "./current-user";
-import { SupabaseTokenVerifier } from "./supabase-token.verifier";
+import {
+  SupabaseTokenVerifier,
+  type VerifiedClaims,
+} from "./supabase-token.verifier";
 import { TenantResolver } from "./tenant-resolver.service";
 
 /**
@@ -45,6 +49,14 @@ export class AuthGuard implements CanActivate {
     if (!claims) {
       throw new UnauthorizedException("Invalid or expired token");
     }
+    (request as Request & { claims?: VerifiedClaims }).claims = claims;
+
+    // @AuthOnly routes need a verified session but no tenant (e.g. onboarding).
+    const authOnly = this.reflector.getAllAndOverride<boolean>(IS_AUTH_ONLY_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (authOnly) return true;
 
     const requestedTenant = this.readTenantHeader(request);
     const user = await this.tenantResolver.resolve(claims, requestedTenant);

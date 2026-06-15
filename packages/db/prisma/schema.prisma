@@ -9,7 +9,10 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // Runtime connection: the RESTRICTED app role (RLS is enforced on it).
+  url       = env("DATABASE_URL")
+  // Admin connection: the postgres superuser, used ONLY for migrations.
+  directUrl = env("DIRECT_URL")
 }
 
 enum Role {

@@ -4,6 +4,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { HealthModule } from "./health/health.module";
 import { CrmModule } from "./crm/crm.module";
+import { AccountModule } from "./account/account.module";
 import { AuthModule } from "./auth/auth.module";
 import { AuthGuard } from "./auth/auth.guard";
 import { RolesGuard } from "./auth/roles.guard";
@@ -17,6 +18,7 @@ import { RolesGuard } from "./auth/roles.guard";
     AuthModule,
     HealthModule,
     CrmModule,
+    AccountModule,
   ],
   providers: [
     // Order matters: throttle first, then authenticate, then authorize.

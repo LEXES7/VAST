@@ -19,9 +19,10 @@
 --     tenant context sees ZERO rows — fail closed, never fail open.
 
 -- Helper: the current tenant for this transaction (NULL if unset).
-CREATE OR REPLACE FUNCTION app_current_tenant() RETURNS uuid
+-- Returns text because ids are stored as TEXT (Prisma String + uuid()).
+CREATE OR REPLACE FUNCTION app_current_tenant() RETURNS text
   LANGUAGE sql STABLE AS $$
-  SELECT NULLIF(current_setting('app.tenant_id', true), '')::uuid
+  SELECT NULLIF(current_setting('app.tenant_id', true), '')
 $$;
 
 -- Tenant-scoped business tables (all keyed on "tenantId").
