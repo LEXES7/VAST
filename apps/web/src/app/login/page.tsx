@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 
@@ -31,49 +32,73 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-6">
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-full max-w-sm flex-col gap-4 rounded-xl border border-white/10 p-8"
-      >
-        <h1 className="text-2xl font-semibold">
-          {mode === "signin" ? "Sign in to Vast" : "Create your Vast account"}
+    <main className="relative flex min-h-screen items-center justify-center px-6">
+      <div className="animate-scale-in glass w-full max-w-md rounded-[1.75rem] p-8">
+        <Link
+          href="/"
+          className="font-display text-2xl font-extrabold tracking-tight text-gradient"
+        >
+          Vast
+        </Link>
+
+        <h1 className="font-display mt-6 text-2xl font-semibold">
+          {mode === "signin" ? "Welcome back" : "Create your account"}
         </h1>
-        <input
-          type="email"
-          required
-          placeholder="you@company.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="rounded-md border border-white/15 bg-transparent px-3 py-2 text-sm"
-        />
-        <input
-          type="password"
-          required
-          minLength={8}
-          placeholder="Password (min 8 chars)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="rounded-md border border-white/15 bg-transparent px-3 py-2 text-sm"
-        />
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-md bg-white px-3 py-2 text-sm font-medium text-black disabled:opacity-50"
-        >
-          {loading ? "…" : mode === "signin" ? "Sign in" : "Sign up"}
-        </button>
-        <button
-          type="button"
-          onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-          className="text-xs text-white/50 hover:text-white/80"
-        >
+        <p className="mt-1 text-sm text-white/50">
           {mode === "signin"
-            ? "Need an account? Sign up"
-            : "Already have an account? Sign in"}
-        </button>
-      </form>
+            ? "Sign in to your workspace."
+            : "Start building with Vast in seconds."}
+        </p>
+
+        {/* segmented toggle */}
+        <div className="mt-6 grid grid-cols-2 gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1">
+          {(["signin", "signup"] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => {
+                setMode(m);
+                setError(null);
+              }}
+              className={`rounded-full py-1.5 text-sm transition ${
+                mode === m ? "bg-white text-black" : "text-white/55 hover:text-white"
+              }`}
+            >
+              {m === "signin" ? "Sign in" : "Sign up"}
+            </button>
+          ))}
+        </div>
+
+        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="label">Email</label>
+            <input
+              type="email"
+              required
+              placeholder="you@company.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="field"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="label">Password</label>
+            <input
+              type="password"
+              required
+              minLength={8}
+              placeholder="At least 8 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="field"
+            />
+          </div>
+          {error && <p className="text-sm text-red-400">{error}</p>}
+          <button type="submit" disabled={loading} className="btn-primary mt-1 w-full disabled:opacity-50">
+            {loading ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

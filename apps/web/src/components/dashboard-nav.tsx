@@ -12,15 +12,17 @@ const links = [
 export function DashboardNav() {
   const pathname = usePathname();
   return (
-    <nav className="flex gap-1">
+    <nav className="glass flex gap-1 rounded-full p-1">
       {links.map((l) => {
         const active = pathname === l.href;
         return (
           <Link
             key={l.href}
             href={l.href}
-            className={`rounded-md px-3 py-1.5 text-sm ${
-              active ? "bg-white/10 text-white" : "text-white/50 hover:text-white"
+            className={`rounded-full px-4 py-1.5 text-sm transition ${
+              active
+                ? "bg-white text-black"
+                : "text-white/55 hover:text-white"
             }`}
           >
             {l.label}

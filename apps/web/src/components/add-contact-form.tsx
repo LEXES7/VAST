@@ -25,7 +25,6 @@ export function AddContactForm() {
       }),
     });
     setLoading(false);
-
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
       const msg = Array.isArray(body.message) ? body.message.join(", ") : body.message;
@@ -35,45 +34,24 @@ export function AddContactForm() {
     setFirstName("");
     setLastName("");
     setEmail("");
-    router.refresh(); // re-fetch the server-rendered list
+    router.refresh();
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-wrap items-end gap-3 rounded-xl border border-white/10 p-4"
-    >
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-white/50">First name</label>
-        <input
-          required
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-          className="rounded-md border border-white/15 bg-transparent px-3 py-2 text-sm"
-        />
+    <form onSubmit={handleSubmit} className="glass flex flex-wrap items-end gap-3 rounded-2xl p-4">
+      <div className="flex flex-1 flex-col gap-1.5">
+        <label className="label">First name</label>
+        <input required value={firstName} onChange={(e) => setFirstName(e.target.value)} className="field" />
       </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-white/50">Last name</label>
-        <input
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-          className="rounded-md border border-white/15 bg-transparent px-3 py-2 text-sm"
-        />
+      <div className="flex flex-1 flex-col gap-1.5">
+        <label className="label">Last name</label>
+        <input value={lastName} onChange={(e) => setLastName(e.target.value)} className="field" />
       </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-xs text-white/50">Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="rounded-md border border-white/15 bg-transparent px-3 py-2 text-sm"
-        />
+      <div className="flex flex-1 flex-col gap-1.5">
+        <label className="label">Email</label>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="field" />
       </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-md bg-white px-4 py-2 text-sm font-medium text-black disabled:opacity-50"
-      >
+      <button type="submit" disabled={loading} className="btn-primary disabled:opacity-50">
         {loading ? "Adding…" : "Add contact"}
       </button>
       {error && <p className="w-full text-sm text-red-400">{error}</p>}

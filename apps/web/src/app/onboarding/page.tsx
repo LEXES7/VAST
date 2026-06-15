@@ -19,7 +19,6 @@ export default function OnboardingPage() {
       body: JSON.stringify({ name }),
     });
     setLoading(false);
-
     if (res.status === 401) {
       router.push("/login");
       return;
@@ -34,33 +33,37 @@ export default function OnboardingPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center px-6">
-      <form
-        onSubmit={handleSubmit}
-        className="flex w-full max-w-sm flex-col gap-4 rounded-xl border border-white/10 p-8"
-      >
-        <h1 className="text-2xl font-semibold">Create your organization</h1>
-        <p className="text-sm text-white/50">
-          This is your workspace in Vast. You&apos;ll be its owner.
+    <main className="relative flex min-h-screen items-center justify-center px-6">
+      <div className="animate-scale-in glass w-full max-w-md rounded-[1.75rem] p-8">
+        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-xl">
+          ✦
+        </div>
+        <h1 className="font-display mt-6 text-2xl font-semibold">
+          Create your organization
+        </h1>
+        <p className="mt-1 text-sm text-white/50">
+          This is your workspace in Vast — you&apos;ll be its owner.
         </p>
-        <input
-          required
-          minLength={1}
-          maxLength={120}
-          placeholder="Acme Inc."
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="rounded-md border border-white/15 bg-transparent px-3 py-2 text-sm"
-        />
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-md bg-white px-3 py-2 text-sm font-medium text-black disabled:opacity-50"
-        >
-          {loading ? "Creating…" : "Create organization"}
-        </button>
-      </form>
+
+        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label className="label">Organization name</label>
+            <input
+              required
+              minLength={1}
+              maxLength={120}
+              placeholder="Acme Inc."
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="field"
+            />
+          </div>
+          {error && <p className="text-sm text-red-400">{error}</p>}
+          <button type="submit" disabled={loading} className="btn-primary mt-1 w-full disabled:opacity-50">
+            {loading ? "Creating…" : "Create organization →"}
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

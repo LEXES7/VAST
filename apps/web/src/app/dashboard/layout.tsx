@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { apiFetch } from "@/utils/api";
 import { LogoutButton } from "@/components/logout-button";
@@ -11,7 +12,6 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Single gate for every dashboard page.
   const supabase = await createClient();
   const {
     data: { user },
@@ -24,19 +24,26 @@ export default async function DashboardLayout({
   const me: Principal | null = meRes.ok ? await meRes.json() : null;
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-8">
-      <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <DashboardNav />
-        <div className="flex items-center gap-3">
-          {me && (
-            <span className="text-sm text-white/40">
-              {me.email} · {me.role}
-            </span>
-          )}
-          <LogoutButton />
+    <div className="relative min-h-screen">
+      <header className="sticky top-0 z-40 px-4 py-4">
+        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-4">
+            <Link href="/" className="font-display text-lg font-extrabold tracking-tight">
+              Vast
+            </Link>
+            <DashboardNav />
+          </div>
+          <div className="flex items-center gap-3">
+            {me && (
+              <span className="hidden text-xs text-white/45 sm:block">
+                {me.email} · <span className="text-brand-violet/90">{me.role}</span>
+              </span>
+            )}
+            <LogoutButton />
+          </div>
         </div>
       </header>
-      {children}
+      <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
     </div>
   );
 }

@@ -27,10 +27,10 @@ export function DealStageSelect({ id, stage }: { id: string; stage: string }) {
       defaultValue={stage}
       onChange={onChange}
       disabled={busy}
-      className="mt-2 w-full rounded-md border border-white/10 bg-transparent px-2 py-1 text-xs text-white/60 disabled:opacity-50"
+      className="mt-2 w-full rounded-lg border border-white/10 bg-white/[0.03] px-2 py-1 text-xs text-white/60 transition hover:border-white/25 focus:border-brand-violet/60 focus:outline-none disabled:opacity-50"
     >
       {DEAL_STAGES.map((s) => (
-        <option key={s.value} value={s.value} className="bg-black">
+        <option key={s.value} value={s.value} className="bg-[#0c0c14]">
           Move to: {s.label}
         </option>
       ))}
