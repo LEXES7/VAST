@@ -48,63 +48,14 @@ We're starting where it matters most — a **CRM / Sales** app as the flagship �
 
 ## 🏗️ Architecture
 
-Vast runs as a **modular monolith** — one app that's cheap and fast to run, but split internally into strict modules with clean boundaries. Any module can later graduate into its own service when scale genuinely demands it. It's the same path companies like Shopify and GitHub took, and it keeps a small team shipping features instead of fighting infrastructure.
+A clean, modern stack: a Next.js frontend, a NestJS API, and PostgreSQL — with authentication handled by Supabase. Built to stay simple and scale gracefully.
 
 ```mermaid
-flowchart TB
-    User([👤 User / Browser])
-
-    subgraph Frontend["🖥️  Frontend — Next.js on Vercel"]
-        UI["React · Tailwind · shadcn/ui"]
-        MW["Session Middleware<br/>(refreshes Supabase session)"]
-    end
-
-    subgraph API["⚙️  Backend — NestJS Modular Monolith"]
-        Guard["🛡️ Auth Guard<br/>(deny-by-default)"]
-        RBAC["RBAC + Tenant Resolver"]
-        subgraph Modules["Modules"]
-            direction LR
-            Auth["Auth"]
-            CRM["CRM"]
-            Onboard["Onboarding"]
-            Health["Health"]
-        end
-    end
-
-    subgraph Data["🗄️  Data Layer"]
-        PG[("PostgreSQL<br/>Row-Level Security")]
-        Redis[("Redis<br/>background jobs")]
-    end
-
-    SB{{"🔐 Supabase Auth<br/>(JWKS — public keys)"}}
-
-    User --> UI --> MW
-    MW -->|"Bearer JWT"| Guard
-    Guard -->|"verify signature"| SB
-    Guard --> RBAC --> Modules
-    Modules -->|"tenant-scoped queries"| PG
-    Modules --> Redis
-```
-
-### How a request authenticates
-
-```mermaid
-sequenceDiagram
-    actor U as User
-    participant W as Next.js
-    participant S as Supabase Auth
-    participant A as Vast API
-    participant D as PostgreSQL (RLS)
-
-    U->>W: Sign in
-    W->>S: signInWithPassword
-    S-->>W: session (JWT)
-    W->>A: GET /api/me  (Authorization: Bearer JWT)
-    A->>S: verify JWT against public JWKS
-    A->>D: resolve tenant + role (membership)
-    D-->>A: tenant, role
-    A-->>W: { tenant, role }
-    W-->>U: Dashboard
+flowchart LR
+    User([👤 User]) --> Web["🖥️ Web App<br/>Next.js"]
+    Web --> API["⚙️ API<br/>NestJS"]
+    API --> DB[("🗄️ PostgreSQL")]
+    API --> Auth{{"🔐 Supabase Auth"}}
 ```
 
 ---
