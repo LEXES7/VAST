@@ -1,0 +1,16 @@
+title = "Vast gitleaks config"
+
+# Use gitleaks' built-in rules, plus the allowlist below.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Files with no real secrets — placeholders and generated content"
+paths = [
+  # Lockfile integrity hashes are high-entropy but not secrets.
+  '''pnpm-lock\.yaml''',
+  # Example env files contain local placeholders only (e.g. vast:vast@localhost).
+  '''(^|/)\.env\.example$''',
+  # README uses placeholder connection strings for documentation.
+  '''README\.md''',
+]
