@@ -1,6 +1,7 @@
 import { apiFetch } from "@/utils/api";
 import { AddDealForm } from "@/components/add-deal-form";
 import { DealStageSelect } from "@/components/deal-stage-select";
+import { DeleteButton } from "@/components/delete-button";
 import { DEAL_STAGES, formatAmount } from "@/lib/deal-stages";
 
 type Deal = { id: string; title: string; amount: string; stage: string };
@@ -49,7 +50,10 @@ export default async function DealsPage() {
                     key={d.id}
                     className="glass-hover rounded-xl border border-white/10 bg-white/[0.03] p-3"
                   >
-                    <p className="text-sm font-medium leading-snug">{d.title}</p>
+                    <div className="flex items-start justify-between gap-1">
+                      <p className="text-sm font-medium leading-snug">{d.title}</p>
+                      <DeleteButton path={`/api/deals/${d.id}`} />
+                    </div>
                     <p className="mt-0.5 text-xs text-ember-300/80">{formatAmount(d.amount)}</p>
                     <DealStageSelect id={d.id} stage={d.stage} />
                   </div>

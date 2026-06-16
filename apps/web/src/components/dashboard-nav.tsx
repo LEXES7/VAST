@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/dashboard", label: "Contacts" },
+  { href: "/dashboard", label: "Overview" },
+  { href: "/dashboard/contacts", label: "Contacts" },
   { href: "/dashboard/companies", label: "Companies" },
   { href: "/dashboard/deals", label: "Deals" },
 ];
@@ -20,9 +21,7 @@ export function DashboardNav() {
             key={l.href}
             href={l.href}
             className={`rounded-full px-4 py-1.5 text-sm transition ${
-              active
-                ? "bg-white text-black"
-                : "text-white/55 hover:text-white"
+              active ? "bg-white text-black" : "text-white/55 hover:text-white"
             }`}
           >
             {l.label}

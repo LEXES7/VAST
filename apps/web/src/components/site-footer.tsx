@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/logo";
 
 const groups = [
   {
@@ -31,12 +32,7 @@ export function SiteFooter() {
     <footer className="relative mt-24 border-t border-white/[0.06]">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 md:grid-cols-4">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-ember-400 to-ember-600 text-sm font-bold text-black">
-              V
-            </span>
-            <span className="font-display text-lg font-extrabold tracking-tight">Vast</span>
-          </div>
+          <Logo />
           <p className="mt-3 max-w-xs text-sm text-white/45">
             A modern, unified business suite. No limits to how you grow.
           </p>

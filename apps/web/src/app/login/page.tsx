@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
+import { Logo } from "@/components/logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -59,12 +60,7 @@ export default function LoginPage() {
   return (
     <main className="relative flex min-h-screen flex-col px-6">
       <header className="flex h-16 items-center">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-ember-400 to-ember-600 text-sm font-bold text-black">
-            V
-          </span>
-          <span className="font-display text-lg font-extrabold tracking-tight">Vast</span>
-        </Link>
+        <Link href="/"><Logo /></Link>
         <Link href="/" className="ml-auto text-sm text-white/50 transition hover:text-white">
           ← Back to home
         </Link>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { apiFetchClient } from "@/utils/api-client";
+import { Logo } from "@/components/logo";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -36,12 +37,7 @@ export default function OnboardingPage() {
   return (
     <main className="relative flex min-h-screen flex-col px-6">
       <header className="flex h-16 items-center">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-ember-500 to-ember-400 text-sm font-bold">
-            V
-          </span>
-          <span className="font-display text-lg font-extrabold tracking-tight">Vast</span>
-        </Link>
+        <Link href="/"><Logo /></Link>
       </header>
 
       <div className="flex flex-1 items-center justify-center py-10">

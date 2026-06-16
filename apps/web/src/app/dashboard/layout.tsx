@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { apiFetch } from "@/utils/api";
 import { LogoutButton } from "@/components/logout-button";
 import { DashboardNav } from "@/components/dashboard-nav";
+import { Logo } from "@/components/logo";
 
 type Principal = { userId: string; tenantId: string; role: string; email: string };
 
@@ -28,9 +29,7 @@ export default async function DashboardLayout({
       <header className="sticky top-0 z-40 px-4 py-4">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-4">
-            <Link href="/" className="font-display text-lg font-extrabold tracking-tight">
-              Vast
-            </Link>
+            <Link href="/"><Logo /></Link>
             <DashboardNav />
           </div>
           <div className="flex items-center gap-3">
