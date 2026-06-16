@@ -29,7 +29,7 @@ $$;
 DO $$
 DECLARE t text;
 BEGIN
-  FOREACH t IN ARRAY ARRAY['companies','contacts','deals','audit_logs']
+  FOREACH t IN ARRAY ARRAY['companies','contacts','deals','tasks','audit_logs']
   LOOP
     EXECUTE format('ALTER TABLE %I ENABLE ROW LEVEL SECURITY;', t);
     EXECUTE format('ALTER TABLE %I FORCE ROW LEVEL SECURITY;', t);

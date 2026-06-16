@@ -31,6 +31,12 @@ enum DealStage {
   lost
 }
 
+enum TaskStatus {
+  todo
+  doing
+  done
+}
+
 // A tenant = one customer organization. Root of all data isolation.
 model Tenant {
   id        String   @id @default(uuid())
@@ -43,6 +49,7 @@ model Tenant {
   contacts    Contact[]
   companies   Company[]
   deals       Deal[]
+  tasks       Task[]
 
   @@map("tenants")
 }
@@ -129,6 +136,24 @@ model Deal {
   @@index([tenantId])
   @@index([tenantId, stage])
   @@map("deals")
+}
+
+// --- Tasks module ---
+
+model Task {
+  id        String     @id @default(uuid())
+  tenantId  String
+  title     String
+  status    TaskStatus @default(todo)
+  dueDate   DateTime?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@map("tasks")
 }
 
 // Immutable record of sensitive actions (logins, role changes, deletes, exports).
