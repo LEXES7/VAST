@@ -36,7 +36,7 @@ export default async function DashboardLayout({
           <div className="flex items-center gap-3">
             {me && (
               <span className="hidden text-xs text-white/45 sm:block">
-                {me.email} · <span className="text-brand-violet/90">{me.role}</span>
+                {me.email} · <span className="text-ember-500/90">{me.role}</span>
               </span>
             )}
             <LogoutButton />

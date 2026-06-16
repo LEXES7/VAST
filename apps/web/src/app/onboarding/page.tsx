@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { apiFetchClient } from "@/utils/api-client";
 
@@ -33,7 +34,17 @@ export default function OnboardingPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center px-6">
+    <main className="relative flex min-h-screen flex-col px-6">
+      <header className="flex h-16 items-center">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-ember-500 to-ember-400 text-sm font-bold">
+            V
+          </span>
+          <span className="font-display text-lg font-extrabold tracking-tight">Vast</span>
+        </Link>
+      </header>
+
+      <div className="flex flex-1 items-center justify-center py-10">
       <div className="animate-scale-in glass w-full max-w-md rounded-[1.75rem] p-8">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-xl">
           ✦
@@ -64,6 +75,11 @@ export default function OnboardingPage() {
           </button>
         </form>
       </div>
+      </div>
+
+      <footer className="py-6 text-center text-xs text-white/35">
+        © 2026 Vast · No limits to how you grow.
+      </footer>
     </main>
   );
 }

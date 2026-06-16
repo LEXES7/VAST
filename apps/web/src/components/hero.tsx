@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef } from "react";
 
-// Hero with a light that follows the cursor across the VAST wordmark.
+// Hero with a soft light that follows the cursor.
 export function Hero({ signedIn }: { signedIn: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -19,55 +19,37 @@ export function Hero({ signedIn }: { signedIn: boolean }) {
     <section
       ref={ref}
       onMouseMove={onMouseMove}
-      className="relative flex min-h-[92vh] flex-col items-center justify-center px-6 text-center"
+      className="relative flex flex-col items-center px-6 pt-36 text-center"
       style={{
         background:
-          "radial-gradient(600px circle at var(--mx, 50%) var(--my, 40%), rgba(139,92,246,0.12), transparent 65%)",
+          "radial-gradient(700px circle at var(--mx, 50%) var(--my, 30%), rgba(249,115,22,0.12), transparent 60%)",
       }}
     >
-      <div className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-white/60 backdrop-blur-xl">
+      <div className="enter inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs text-white/65 backdrop-blur-xl">
         <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-cyan opacity-75" />
-          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-cyan" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ember-300 opacity-75" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ember-300" />
         </span>
-        Now in early access
+        Now in early access · CRM first
       </div>
 
-      {/* Giant wordmark */}
-      <h1
-        className="font-display mt-8 select-none text-[26vw] font-extrabold leading-[0.82] tracking-tight md:text-[20vw] lg:text-[16rem]"
-        style={{ letterSpacing: "-0.04em" }}
-      >
-        <span className="text-gradient drop-shadow-[0_0_60px_rgba(139,92,246,0.35)]">
-          VAST
-        </span>
+      <h1 className="enter font-display mt-7 max-w-4xl text-balance text-5xl font-extrabold leading-[1.02] tracking-tight [animation-delay:80ms] md:text-7xl">
+        The business suite that
+        <br className="hidden sm:block" /> feels like the{" "}
+        <span className="text-gradient">future</span>.
       </h1>
 
-      <p className="animate-fade-up mt-2 max-w-xl text-balance text-lg text-white/55 [animation-delay:120ms]">
-        A modern, unified business suite. Clean UX, one connected data model, and
-        security built into the foundation.
+      <p className="enter mt-6 max-w-xl text-balance text-lg text-white/55 [animation-delay:160ms]">
+        Vast unifies your customers, companies, and deals into one fast, beautiful
+        workspace — with security built into the foundation.
       </p>
 
-      <div className="animate-fade-up mt-9 flex items-center gap-3 [animation-delay:240ms]">
-        {signedIn ? (
-          <Link href="/dashboard" className="btn-primary">
-            Open dashboard →
-          </Link>
-        ) : (
-          <>
-            <Link href="/login" className="btn-primary">
-              Get started →
-            </Link>
-            <a href="#features" className="btn-ghost">
-              Explore
-            </a>
-          </>
-        )}
+      <div className="enter mt-9 flex flex-wrap items-center justify-center gap-3 [animation-delay:240ms]">
+        <Link href={signedIn ? "/dashboard" : "/login"} className="btn-primary">
+          {signedIn ? "Open dashboard" : "Start free"} →
+        </Link>
+        <a href="#features" className="btn-ghost">See what's inside</a>
       </div>
-
-      <span className="font-display mt-16 text-sm tracking-[0.3em] text-white/30">
-        NO LIMITS TO HOW YOU GROW
-      </span>
     </section>
   );
 }

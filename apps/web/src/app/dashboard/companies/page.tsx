@@ -29,7 +29,7 @@ export default async function CompaniesPage() {
                 className="flex items-center justify-between px-5 py-3.5 transition hover:bg-white/[0.03]"
               >
                 <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-cyan/30 to-brand-blue/30 text-sm font-medium">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-ember-300/30 to-ember-400/30 text-sm font-medium">
                     {c.name.charAt(0).toUpperCase()}
                   </span>
                   <span className="font-medium">{c.name}</span>

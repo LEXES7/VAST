@@ -32,16 +32,22 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center px-6">
-      <div className="animate-scale-in glass w-full max-w-md rounded-[1.75rem] p-8">
-        <Link
-          href="/"
-          className="font-display text-2xl font-extrabold tracking-tight text-gradient"
-        >
-          Vast
+    <main className="relative flex min-h-screen flex-col px-6">
+      <header className="flex h-16 items-center">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-ember-500 to-ember-400 text-sm font-bold">
+            V
+          </span>
+          <span className="font-display text-lg font-extrabold tracking-tight">Vast</span>
         </Link>
+        <Link href="/" className="ml-auto text-sm text-white/50 transition hover:text-white">
+          ← Back to home
+        </Link>
+      </header>
 
-        <h1 className="font-display mt-6 text-2xl font-semibold">
+      <div className="flex flex-1 items-center justify-center py-10">
+      <div className="animate-scale-in glass w-full max-w-md rounded-[1.75rem] p-8">
+        <h1 className="font-display text-2xl font-semibold">
           {mode === "signin" ? "Welcome back" : "Create your account"}
         </h1>
         <p className="mt-1 text-sm text-white/50">
@@ -99,6 +105,11 @@ export default function LoginPage() {
           </button>
         </form>
       </div>
+      </div>
+
+      <footer className="py-6 text-center text-xs text-white/35">
+        © 2026 Vast · No limits to how you grow.
+      </footer>
     </main>
   );
 }

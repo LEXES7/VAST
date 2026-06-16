@@ -50,7 +50,7 @@ export default async function DealsPage() {
                     className="glass-hover rounded-xl border border-white/10 bg-white/[0.03] p-3"
                   >
                     <p className="text-sm font-medium leading-snug">{d.title}</p>
-                    <p className="mt-0.5 text-xs text-brand-cyan/80">{formatAmount(d.amount)}</p>
+                    <p className="mt-0.5 text-xs text-ember-300/80">{formatAmount(d.amount)}</p>
                     <DealStageSelect id={d.id} stage={d.stage} />
                   </div>
                 ))}

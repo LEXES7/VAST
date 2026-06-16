@@ -9,25 +9,23 @@ export default {
         display: ["var(--font-display)", "system-ui", "sans-serif"],
       },
       colors: {
-        brand: {
-          violet: "#8b5cf6",
-          blue: "#3b82f6",
-          cyan: "#22d3ee",
-          pink: "#ec4899",
+        // Warm "ember" accent system on near-black.
+        ember: {
+          300: "#fbbf24",
+          400: "#fb923c",
+          500: "#f97316",
+          600: "#ea580c",
+          700: "#c2410c",
         },
       },
       keyframes: {
         "aurora-a": {
-          "0%, 100%": { transform: "translate(-10%, -10%) scale(1)" },
-          "50%": { transform: "translate(15%, 20%) scale(1.25)" },
+          "0%, 100%": { transform: "translate(-8%, -6%) scale(1)" },
+          "50%": { transform: "translate(10%, 12%) scale(1.2)" },
         },
         "aurora-b": {
-          "0%, 100%": { transform: "translate(10%, 5%) scale(1.1)" },
-          "50%": { transform: "translate(-20%, -15%) scale(0.9)" },
-        },
-        "aurora-c": {
-          "0%, 100%": { transform: "translate(0%, 10%) scale(1)" },
-          "50%": { transform: "translate(20%, -10%) scale(1.2)" },
+          "0%, 100%": { transform: "translate(8%, 4%) scale(1.1)" },
+          "50%": { transform: "translate(-14%, -10%) scale(0.95)" },
         },
         float: {
           "0%, 100%": { transform: "translateY(0)" },
@@ -37,8 +35,13 @@ export default {
           "0%, 100%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
         },
-        shimmer: {
-          "100%": { transform: "translateX(100%)" },
+        "glow-pulse": {
+          "0%, 100%": { opacity: "0.6" },
+          "50%": { opacity: "1" },
+        },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
         },
         "fade-up": {
           from: { opacity: "0", transform: "translateY(20px)" },
@@ -50,11 +53,12 @@ export default {
         },
       },
       animation: {
-        "aurora-a": "aurora-a 20s ease-in-out infinite",
-        "aurora-b": "aurora-b 24s ease-in-out infinite",
-        "aurora-c": "aurora-c 28s ease-in-out infinite",
+        "aurora-a": "aurora-a 22s ease-in-out infinite",
+        "aurora-b": "aurora-b 26s ease-in-out infinite",
         float: "float 6s ease-in-out infinite",
         "gradient-x": "gradient-x 8s ease infinite",
+        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+        marquee: "marquee 30s linear infinite",
         "fade-up": "fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both",
         "scale-in": "scale-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",
       },
