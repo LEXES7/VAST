@@ -211,6 +211,20 @@
   }
 }
 
+/* Page transition: opacity-only so it never creates a containing block that
+   would break position:fixed (the header). Re-runs on every route change. */
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.page-enter {
+  animation: page-in 0.45s ease both;
+}
+
 /* Entrance: visible by default; animates only when motion is welcome. */
 .enter {
   opacity: 1;
