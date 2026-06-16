@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { Hero } from "@/components/hero";
+import { HeroShowcase } from "@/components/hero-showcase";
 import { DashboardMock } from "@/components/dashboard-mock";
 import { IntegrationsDiagram } from "@/components/integrations-diagram";
 import { PricingTiers } from "@/components/pricing-tiers";
@@ -38,11 +38,7 @@ export default async function Home() {
       <SiteHeader signedIn={signedIn} />
 
       <main>
-        <Hero signedIn={signedIn} />
-
-        <div className="enter px-6 pt-14 [animation-delay:320ms]">
-          <DashboardMock />
-        </div>
+        <HeroShowcase signedIn={signedIn} />
 
         {/* trust marquee */}
         <div className="relative mt-20 overflow-hidden border-y border-white/[0.06] py-5">

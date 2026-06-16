@@ -4,25 +4,24 @@ const groups = [
   {
     title: "Product",
     links: [
-      ["Features", "/#features"],
-      ["Pipeline", "/#pipeline"],
-      ["Security", "/#security"],
-    ],
-  },
-  {
-    title: "Account",
-    links: [
-      ["Sign in", "/login"],
-      ["Get started", "/login"],
-      ["Dashboard", "/dashboard"],
+      ["Features", "/features"],
+      ["Pricing", "/pricing"],
+      ["Blog", "/blog"],
     ],
   },
   {
     title: "Company",
     links: [
-      ["About", "/"],
-      ["Roadmap", "/"],
-      ["Contact", "/"],
+      ["About", "/about"],
+      ["Contact", "/contact"],
+      ["Login", "/login"],
+    ],
+  },
+  {
+    title: "Account",
+    links: [
+      ["Get started", "/login"],
+      ["Dashboard", "/dashboard"],
     ],
   },
 ];
@@ -33,7 +32,7 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 md:grid-cols-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-ember-500 to-ember-400 text-sm font-bold">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-ember-400 to-ember-600 text-sm font-bold text-black">
               V
             </span>
             <span className="font-display text-lg font-extrabold tracking-tight">Vast</span>
@@ -45,9 +44,7 @@ export function SiteFooter() {
 
         {groups.map((g) => (
           <div key={g.title}>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-white/40">
-              {g.title}
-            </h4>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-white/40">{g.title}</h4>
             <ul className="mt-4 space-y-2.5">
               {g.links.map(([label, href]) => (
                 <li key={label}>

@@ -186,6 +186,31 @@
   }
 }
 
+/* ── Scroll-triggered reveal ─────────────────────────────
+   Visible by default; the Reveal component arms [data-reveal="hidden"]
+   on mount only when motion is welcome, then flips to "shown" in view. */
+[data-reveal] {
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(34px);
+}
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 /* Entrance: visible by default; animates only when motion is welcome. */
 .enter {
   opacity: 1;
